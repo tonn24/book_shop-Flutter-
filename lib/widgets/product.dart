@@ -27,10 +27,12 @@ class ProductItem extends StatelessWidget {
         ),
         child: GestureDetector(
           onTap: (){
-            Navigator.of(context).pushNamed(BookDetailScreen.routeName, arguments: id);
+            Navigator.of(context).pushNamed(
+                BookDetailScreen.routeName,
+                arguments: id
+            );
           },
           child: Image.network(
-
             imageUrl,
             fit: BoxFit.cover,
           ),
