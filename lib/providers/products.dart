@@ -1,6 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:provider/provider.dart';
-import '../models/product.dart';
+import 'product.dart';
 
 class Products with ChangeNotifier {
   //final String product;
@@ -21,26 +21,41 @@ class Products with ChangeNotifier {
     ),
     Product(
       id: 'p1',
-      title: 'Homo Deus',
+      title: 'Limitless Mind',
       author: 'Yuval Noah Harari',
       price: 19.99,
       imageUrl: 'https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1562884180l/42940498._SY475_.jpg',
     ),
     Product(
       id: 'p1',
-      title: 'Homo Deus',
+      title: 'Another Title',
       author: 'Yuval Noah Harari',
       price: 19.99,
       imageUrl: 'https://images-na.ssl-images-amazon.com/images/I/718K91oepAL.jpg',
     )
   ];
 
+  var _showFavoritesOnly = false;
+
   List<Product> get items {
+    //if(_showFavoritesOnly) {
+    //  return _items.where((bookItem) => bookItem.isFavorite).toList();
+    //}
     return [..._items];
+  }
+
+  List<Product> get favoriteBooks {
+    return _items.where((bookItem) => bookItem.isFavorite).toList();
+  }
+
+
+  Product findById(String id) {
+    return _items.firstWhere((book) => book.id == id);
   }
 
   void addProduct() {
     //_items.add(product);
     notifyListeners();
   }
+
 }

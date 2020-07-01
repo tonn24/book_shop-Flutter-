@@ -1,23 +1,26 @@
 import 'package:flutter/material.dart';
 import 'package:bookshop/constant.dart';
 import 'package:bookshop/screens/book_detail_screen.dart';
+import 'package:provider/provider.dart';
+import '../providers/product.dart';
 
 
-class ProductItem extends StatelessWidget {
-  final String id;
-  final String imageUrl;
-  final String title;
+class bookItem extends StatelessWidget {
+  //final String id;
+  //final String imageUrl;
+  //final String title;
 
-  ProductItem(this.id, this.imageUrl, this.title);
+  //bookItem(this.id, this.imageUrl, this.title);
 
   @override
   Widget build(BuildContext context) {
+    final product = Provider.of<Product>(context);
     return ClipRRect(
       borderRadius: BorderRadius.circular(10.0),
       child: GridTile(
         header: GridTileBar(
           leading: Text(
-            title,
+            product.title,
             textAlign: TextAlign.center,
             style: TextStyle(
               color: whiteColor,
@@ -29,23 +32,25 @@ class ProductItem extends StatelessWidget {
           onTap: (){
             Navigator.of(context).pushNamed(
                 BookDetailScreen.routeName,
-                arguments: id
+                arguments: product.id
             );
           },
           child: Image.network(
-            imageUrl,
+            product.imageUrl,
             fit: BoxFit.cover,
           ),
         ),
         footer: GridTileBar(
           backgroundColor: darkColor,
           leading: IconButton(
-              icon: Icon(Icons.favorite),
-              onPressed: (){},
+              icon: Icon(product.isFavorite ? Icons.favorite : Icons.favorite_border),
+              onPressed: (){
+                product.toggleFavorite();
+              },
             color: Theme.of(context).accentColor,
           ),
           title: Text(
-              title,
+            product.title,
               textAlign: TextAlign.center,
             ),
           trailing: IconButton(
