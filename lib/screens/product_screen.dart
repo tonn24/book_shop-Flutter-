@@ -3,6 +3,8 @@ import 'package:flutter/material.dart';
 import 'package:bookshop/widgets/products_grid.dart';
 import 'package:provider/provider.dart';
 import '../providers/products.dart';
+import '../widgets/badge.dart';
+import '../providers/cart.dart';
 
 enum Options {
   Favorites,
@@ -38,7 +40,18 @@ class _ProductsScreenState extends State<ProductsScreen> {
             PopupMenuItem(child: Text('Only Favorite books'), value: Options.Favorites),
             PopupMenuItem(child: Text('Show All'), value: Options.All)
           ],
-        )
+        ),
+        Consumer<Cart>(
+          builder: (_, cart, ch)  => Badge(
+            child: ch,
+            value: cart.itemCount.toString(),
+          ),
+          child: IconButton(
+            icon: Icon(Icons.shopping_basket),
+            onPressed: (){},
+          ),
+        ),
+
       ],
     ),
       body: ProductsGrid(_showOnlyFavorites),

@@ -3,18 +3,16 @@ import 'package:bookshop/constant.dart';
 import 'package:bookshop/screens/book_detail_screen.dart';
 import 'package:provider/provider.dart';
 import '../providers/product.dart';
+import '../providers/cart.dart';
 
 
-class bookItem extends StatelessWidget {
-  //final String id;
-  //final String imageUrl;
-  //final String title;
-
-  //bookItem(this.id, this.imageUrl, this.title);
+class BookItem extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final product = Provider.of<Product>(context);
+    final product = Provider.of<Product>(context, listen: false);
+    final cart = Provider.of<Cart>(context, listen: false);
+
     return ClipRRect(
       borderRadius: BorderRadius.circular(10.0),
       child: GridTile(
@@ -55,7 +53,9 @@ class bookItem extends StatelessWidget {
             ),
           trailing: IconButton(
             icon: Icon(Icons.shopping_basket),
-            onPressed: (){},
+            onPressed: (){
+              cart.addItem(product.id, product.price, product.title, product.author);
+            },
             color: Theme.of(context).accentColor,
           ),
         )
