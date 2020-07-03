@@ -5,6 +5,7 @@ import 'package:provider/provider.dart';
 import '../providers/products.dart';
 import '../widgets/badge.dart';
 import '../providers/cart.dart';
+import 'cart_screen.dart';
 
 enum Options {
   Favorites,
@@ -48,7 +49,9 @@ class _ProductsScreenState extends State<ProductsScreen> {
           ),
           child: IconButton(
             icon: Icon(Icons.shopping_basket),
-            onPressed: (){},
+            onPressed: (){
+              Navigator.of(context).pushNamed(CartScreen.routeName);
+            },
           ),
         ),
 

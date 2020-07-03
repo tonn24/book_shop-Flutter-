@@ -1,3 +1,4 @@
+import 'package:bookshop/screens/cart_screen.dart';
 import 'package:flutter/material.dart';
 import 'constant.dart';
 import 'screens/product_screen.dart';
@@ -5,6 +6,7 @@ import 'screens/book_detail_screen.dart';
 import 'providers/products.dart';
 import 'package:provider/provider.dart';
 import 'providers/cart.dart';
+import 'screens/cart_screen.dart';
 
 void main() => runApp(MyApp());
 
@@ -25,11 +27,12 @@ class MyApp extends StatelessWidget {
         theme: ThemeData(
           primaryColor: darkBackgroundColor,
           accentColor: backgroundColor,
-          //fontFamily: 'Lato',
+
         ),
         home: ProductsScreen(),
         routes: {
           BookDetailScreen.routeName: (ctx) => BookDetailScreen(),
+          CartScreen.routeName: (ctx)  => CartScreen(),
         },
       ),
     );
