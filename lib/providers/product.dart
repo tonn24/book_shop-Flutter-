@@ -6,6 +6,7 @@ class Product with ChangeNotifier {
   final String author;
   final double price;
   final String imageUrl;
+  final String description;
   bool isFavorite;
 
   Product({
@@ -14,6 +15,7 @@ class Product with ChangeNotifier {
     @required this.author,
     @required this.price,
     @required this.imageUrl,
+    @required this.description,
       this.isFavorite = false});
 
   void toggleFavorite() {
