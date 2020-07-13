@@ -1,4 +1,5 @@
 import 'package:bookshop/providers/products.dart';
+import 'package:bookshop/widgets/app_drawer.dart';
 import 'package:flutter/material.dart';
 import 'package:bookshop/widgets/products_grid.dart';
 import 'package:provider/provider.dart';
@@ -6,6 +7,7 @@ import '../providers/products.dart';
 import '../widgets/badge.dart';
 import '../providers/cart.dart';
 import 'cart_screen.dart';
+import '../widgets/app_drawer.dart';
 
 enum Options {
   Favorites,
@@ -57,6 +59,7 @@ class _ProductsScreenState extends State<ProductsScreen> {
 
       ],
     ),
+      drawer: AppDrawer(),
       body: ProductsGrid(_showOnlyFavorites),
     );
   }
