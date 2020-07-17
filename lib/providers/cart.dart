@@ -72,6 +72,7 @@ class Cart with ChangeNotifier {
                 title: existingCartItem.title,
                 pricePerOne: existingCartItem.pricePerOne,
                 quantity: existingCartItem.quantity - 1,
+                author: existingCartItem.author,
               ));
     } else {
       _items.remove(productId);
