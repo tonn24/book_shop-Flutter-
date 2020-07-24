@@ -1,4 +1,4 @@
-import 'package:bookshop/screens/edit_product_screen.dart';
+import 'package:bookshop/screens/edit_book_screen.dart';
 import 'package:bookshop/widgets/app_drawer.dart';
 import 'package:flutter/material.dart';
 import '../providers/products.dart';
