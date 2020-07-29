@@ -1,5 +1,8 @@
+import 'package:bookshop/providers/products.dart';
 import 'package:flutter/material.dart';
 import '../providers/product.dart';
+import '../providers/products.dart';
+import 'package:provider/provider.dart';
 
 class EditBookScreen extends StatefulWidget {
   static const routeName = '/edit-product';
@@ -16,11 +19,40 @@ class _EditBookScreenState extends State<EditBookScreen> {
   final _imageUrlController =  TextEditingController();
   final _form = GlobalKey<FormState>();
   var _editedProduct = Product(id: null, title: '', price: 0, description: '', author: '', imageUrl: '',);
+  var _initValues = {
+    'title': '',
+    'author': '',
+    'price': '',
+    'description': '',
+    'imageUrl': ''
+  };
+  var _isInit = true;
 
   @override
   void initState() {
     _imageFocusNode.addListener(_updateImageUrl);
     super.initState();
+  }
+
+  @override
+  void didChangeDependencies() {
+    // TODO: implement didChangeDependencies
+    if(_isInit) {
+      final productId = ModalRoute.of(context).settings.arguments as String;
+      if(productId != null){
+        _editedProduct = Provider.of<Products>(context, listen: false).findById(productId);
+        _initValues = {
+          'title': _editedProduct.title,
+          'author': _editedProduct.author,
+          'description': _editedProduct.description,
+          'imageUrl': null,
+          'price': _editedProduct.price.toString(),
+        };
+        _imageUrlController.text = _editedProduct.imageUrl;
+      }
+    }
+    _isInit = false;
+    super.didChangeDependencies();
   }
 
   void _updateImageUrl() {
@@ -48,11 +80,13 @@ class _EditBookScreenState extends State<EditBookScreen> {
       return;
     }
     _form.currentState.save();
-    print(_editedProduct.title);
-    print(_editedProduct.price);
-    print(_editedProduct.description);
-    print(_editedProduct.author);
-    print(_editedProduct.imageUrl);
+    if(_editedProduct.id != null) {
+      Provider.of<Products>(context, listen: false).updateProduct(_editedProduct.id, _editedProduct);
+
+    } else {
+      Provider.of<Products>(context, listen: false).addProduct(_editedProduct);
+    }
+    Navigator.of(context).pop();
   }
 
   @override
@@ -73,6 +107,7 @@ class _EditBookScreenState extends State<EditBookScreen> {
             child: ListView(
               children: <Widget>[
                 TextFormField(
+                  initialValue: _initValues['title'],
                   decoration: InputDecoration(
                     labelText: 'Title',
                   ),
@@ -93,11 +128,13 @@ class _EditBookScreenState extends State<EditBookScreen> {
                         description: _editedProduct.description,
                         author: _editedProduct.author,
                         imageUrl: _editedProduct.imageUrl,
-                        id: null
+                        id: _editedProduct.id,
+                        isFavorite: _editedProduct.isFavorite,
                     );
                   },
                 ),
                 TextFormField(
+                  initialValue: _initValues['author'],
                   decoration: InputDecoration(
                     labelText: 'Author',
                   ),
@@ -119,11 +156,13 @@ class _EditBookScreenState extends State<EditBookScreen> {
                         description: _editedProduct.description,
                         author: value,
                         imageUrl: _editedProduct.imageUrl,
-                        id: null
+                        id: _editedProduct.id,
+                        isFavorite: _editedProduct.isFavorite,
                     );
                   },
                 ),
                 TextFormField(
+                  initialValue: _initValues['price'],
                   decoration: InputDecoration(
                     labelText: 'Price',
                   ),
@@ -152,11 +191,13 @@ class _EditBookScreenState extends State<EditBookScreen> {
                         description: _editedProduct.description,
                         author: _editedProduct.author,
                         imageUrl: _editedProduct.imageUrl,
-                        id: null
+                        id: _editedProduct.id,
+                        isFavorite: _editedProduct.isFavorite,
                     );
                   },
                 ),
                 TextFormField(
+                  initialValue: _initValues['description'],
                   decoration: InputDecoration(
                     labelText: 'Description',
                   ),
@@ -180,7 +221,8 @@ class _EditBookScreenState extends State<EditBookScreen> {
                         description: value,
                         author: _editedProduct.author,
                         imageUrl: _editedProduct.imageUrl,
-                        id: null
+                        id: _editedProduct.id,
+                        isFavorite: _editedProduct.isFavorite,
                     );
                   },
                 ),
@@ -235,7 +277,8 @@ class _EditBookScreenState extends State<EditBookScreen> {
                               description: _editedProduct.description,
                               author: _editedProduct.author,
                               imageUrl: value,
-                              id: null
+                              id: _editedProduct.id,
+                              isFavorite: _editedProduct.isFavorite,
                           );
                         },
                         ),

@@ -1,11 +1,13 @@
 import 'package:flutter/material.dart';
+import '../screens/edit_book_screen.dart';
 
 class UserBookItem extends StatelessWidget {
+  final String id;
   final String title;
   final String imageUrl;
 
 
-  UserBookItem(this.title, this.imageUrl);
+  UserBookItem(this.id, this.title, this.imageUrl);
 
   @override
   Widget build(BuildContext context) {
@@ -18,7 +20,9 @@ class UserBookItem extends StatelessWidget {
         child: Row(children: <Widget>[
           IconButton(
             icon: Icon(Icons.edit),
-            onPressed: () {},
+            onPressed: () {
+              Navigator.of(context).pushNamed(EditBookScreen.routeName, arguments: id );
+            },
             color: Theme.of(context).primaryColor,
           ),
           IconButton(

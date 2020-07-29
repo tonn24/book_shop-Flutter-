@@ -32,6 +32,7 @@ class UserBooksScreen extends StatelessWidget {
               Column(
                 children: <Widget>[
               UserBookItem(
+                  books.items[i].id,
                   books.items[i].title,
                   books.items[i].imageUrl),
                   Divider()
