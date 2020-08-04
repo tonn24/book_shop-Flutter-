@@ -1,6 +1,9 @@
 import 'package:flutter/cupertino.dart';
 import 'package:provider/provider.dart';
 import 'product.dart';
+import 'dart:convert';
+import 'package:http/http.dart' as http;
+
 
 class Products with ChangeNotifier {
   //final String product;
@@ -58,6 +61,16 @@ class Products with ChangeNotifier {
   }
 
   void addProduct(Product product) {
+    const url = 'https://book-shop-d9875.firebaseio.com/products.json';
+    http.post(url, body: json.encode({
+      'title': product.title,
+      'description': product.description,
+      'imageUrl': product.imageUrl,
+      'price': product.price,
+      'author': product.author,
+      'isFavorite': product.isFavorite
+    }),
+    );
     final newProduct = Product(
       title: product.title,
       description: product.description,
@@ -78,6 +91,11 @@ class Products with ChangeNotifier {
     } else {
       print('...');
     }
+  }
+
+  void deleteProduct(String id) {
+    _items.removeWhere((book) => book.id == id);
+    notifyListeners();
   }
 
 }

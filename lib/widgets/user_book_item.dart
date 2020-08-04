@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import '../screens/edit_book_screen.dart';
+import 'package:provider/provider.dart';
+import '../providers/products.dart';
 
 class UserBookItem extends StatelessWidget {
   final String id;
@@ -27,7 +29,9 @@ class UserBookItem extends StatelessWidget {
           ),
           IconButton(
             icon: Icon(Icons.delete),
-            onPressed: () {},
+            onPressed: () {
+              Provider.of<Products>(context, listen: false).deleteProduct(id);
+            },
               color: Theme.of(context).errorColor,
           )
         ],),
