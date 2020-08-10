@@ -60,9 +60,9 @@ class Products with ChangeNotifier {
     return _items.firstWhere((book) => book.id == id);
   }
 
-  void addProduct(Product product) {
+  Future<void> addProduct(Product product) {
     const url = 'https://book-shop-d9875.firebaseio.com/products.json';
-    http.post(url, body: json.encode({
+    return http.post(url, body: json.encode({
       'title': product.title,
       'description': product.description,
       'imageUrl': product.imageUrl,
@@ -70,17 +70,19 @@ class Products with ChangeNotifier {
       'author': product.author,
       'isFavorite': product.isFavorite
     }),
-    );
-    final newProduct = Product(
-      title: product.title,
-      description: product.description,
-      author: product.author,
-      imageUrl: product.imageUrl,
-      price: product.price,
-      id: DateTime.now().toString()
-    );
-    _items.add(newProduct);
-    notifyListeners();
+    ).then((response) {
+      print(json.decode(response.body));
+      final newProduct = Product(
+          title: product.title,
+          description: product.description,
+          author: product.author,
+          imageUrl: product.imageUrl,
+          price: product.price,
+          id: json.decode(response.body)['name'],
+      );
+      _items.add(newProduct);
+      notifyListeners();
+    });
   }
 
   void updateProduct(String id, Product newProduct) {

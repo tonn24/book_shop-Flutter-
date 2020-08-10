@@ -27,6 +27,7 @@ class _EditBookScreenState extends State<EditBookScreen> {
     'imageUrl': ''
   };
   var _isInit = true;
+  var _isLoading = false;
 
   @override
   void initState() {
@@ -80,14 +81,27 @@ class _EditBookScreenState extends State<EditBookScreen> {
       return;
     }
     _form.currentState.save();
+    setState(() {
+      _isLoading = true;
+      _isLoading = true;
+    });
     if(_editedProduct.id != null) {
       Provider.of<Products>(context, listen: false).updateProduct(_editedProduct.id, _editedProduct);
-
+      setState(() {
+        _isLoading = false;
+      });
+      Navigator.of(context).pop();
     } else {
 
-      Provider.of<Products>(context, listen: false).addProduct(_editedProduct);
+      Provider.of<Products>(context, listen: false)
+          .addProduct(_editedProduct)
+          .then((_) {
+            setState(() {
+              _isLoading = false;
+            });
+        Navigator.of(context).pop();
+      });
     }
-    Navigator.of(context).pop();
   }
 
   @override
@@ -101,7 +115,9 @@ class _EditBookScreenState extends State<EditBookScreen> {
           ),
         ],
         ),
-      body: Padding(
+      body: _isLoading ? Center(
+        child: CircularProgressIndicator(),
+      ) : Padding(
         padding: EdgeInsets.all(20.0),
         child: Form(
             key: _form,
