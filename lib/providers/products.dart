@@ -3,43 +3,13 @@ import 'package:provider/provider.dart';
 import 'product.dart';
 import 'dart:convert';
 import 'package:http/http.dart' as http;
+import '../providers/products.dart';
 
 
 class Products with ChangeNotifier {
   //final String product;
   List<Product> _items = [
-    Product(
-      id: 'p1',
-      title: 'Homo Deus',
-      author: 'Yuval Noah Harari',
-      price: 19.99,
-      imageUrl: 'https://img.yakaboo.ua/media/catalog/product/cache/1/image/398x565/234c7c011ba026e66d29567e1be1d1f7/1/0/1024045308.jpg',
-      description: "Homo Deus is audacious, speculative and thought-provoking. And for Brand Genetics, an agency that believes that the future is human, Homo Deus is a direct challenge to our faith in human strengths, human values and human experience. ... We should be decoding the algorithms of human behaviour.",
-    ),
-    Product(
-      id: 'p2',
-      title: 'Homo Deus',
-      author: 'Yuval Noah Harari',
-      price: 19.99,
-      imageUrl: 'https://images-na.ssl-images-amazon.com/images/I/71FX96Ae-PL.jpg',
-        description: "Homo Deus is audacious, speculative and thought-provoking. And for Brand Genetics, an agency that believes that the future is human, Homo Deus is a direct challenge to our faith in human strengths, human values and human experience. ... We should be decoding the algorithms of human behaviour."
-    ),
-    Product(
-      id: 'p3',
-      title: 'Limitless Mind',
-      author: 'Yuval Noah Harari',
-      price: 19.99,
-      imageUrl: 'https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1562884180l/42940498._SY475_.jpg',
-        description: "Homo Deus is audacious, speculative and thought-provoking. And for Brand Genetics, an agency that believes that the future is human, Homo Deus is a direct challenge to our faith in human strengths, human values and human experience. ... We should be decoding the algorithms of human behaviour."
-    ),
-    Product(
-      id: 'p4',
-      title: 'Another Title',
-      author: 'Yuval Noah Harari',
-      price: 19.99,
-      imageUrl: 'https://images-na.ssl-images-amazon.com/images/I/718K91oepAL.jpg',
-        description: "Homo Deus is audacious, speculative and thought-provoking. And for Brand Genetics, an agency that believes that the future is human, Homo Deus is a direct challenge to our faith in human strengths, human values and human experience. ... We should be decoding the algorithms of human behaviour."
-    )
+
   ];
 
   var _showFavoritesOnly = false;
@@ -60,29 +30,60 @@ class Products with ChangeNotifier {
     return _items.firstWhere((book) => book.id == id);
   }
 
-  Future<void> addProduct(Product product) {
+  Future<void> fetchAndSetBooks() async {
+    const url = 'https://flutter-update.firebaseio.com/products.json';
+    try {
+      final response = await http.get(url);
+      final data = json.decode(response.body) as Map<String, dynamic>;
+      print(data);
+      final List<Product> loadedBooks = [];
+      data.forEach((bookId, bookData) {
+        loadedBooks.add(Product(
+          id: bookId,
+          author: bookData['author'],
+          title: bookData['title'],
+          imageUrl: bookData['imageUrl'],
+          description: bookData['description'],
+          price: bookData['price'],
+          isFavorite: bookData['isFavorite']
+        ));
+      });
+      _items = loadedBooks;
+      notifyListeners();
+    } catch (err) {
+      print(err);
+    }
+  }
+
+  Future<void> addProduct(Product product) async {
     const url = 'https://book-shop-d9875.firebaseio.com/products.json';
-    return http.post(url, body: json.encode({
-      'title': product.title,
-      'description': product.description,
-      'imageUrl': product.imageUrl,
-      'price': product.price,
-      'author': product.author,
-      'isFavorite': product.isFavorite
-    }),
-    ).then((response) {
-      print(json.decode(response.body));
+    try {
+      final response = await http.post(
+        url,
+        body: json.encode({
+          'title': product.title,
+          'author': product.author,
+          'description': product.description,
+          'imageUrl': product.imageUrl,
+          'price': product.price,
+          'isFavorite': product.isFavorite,
+        }),
+      );
       final newProduct = Product(
-          title: product.title,
-          description: product.description,
-          author: product.author,
-          imageUrl: product.imageUrl,
-          price: product.price,
-          id: json.decode(response.body)['name'],
+        title: product.title,
+        description: product.description,
+        price: product.price,
+        imageUrl: product.imageUrl,
+        id: json.decode(response.body)['name'],
+        author: product.author,
       );
       _items.add(newProduct);
+      // _items.insert(0, newProduct); // at the start of the list
       notifyListeners();
-    });
+    } catch (error) {
+      print(error);
+      throw error;
+    }
   }
 
   void updateProduct(String id, Product newProduct) {
