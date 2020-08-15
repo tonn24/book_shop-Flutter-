@@ -3,6 +3,7 @@ import './cart.dart';
 import 'dart:convert';
 import 'package:http/http.dart' as http;
 
+
 class OrderItem {
   final String id;
   final double amount;
@@ -17,6 +18,36 @@ class Orders with ChangeNotifier {
 
   List<OrderItem> get orders {
     return [..._orders];
+  }
+
+  Future<void> fetchAndSetOrder() async  {
+    const url = 'https://book-shop-d9875.firebaseio.com/orders.json';
+    final response = await http.get(url);
+    final List<OrderItem> loadedOrders = [];
+    final extractedData = json.decode(response.body) as Map<String, dynamic>;
+    try {
+      extractedData.forEach((id, data) {
+        loadedOrders.add(OrderItem(
+            id: id,
+            amount: data['amount'],
+            dateTime: DateTime.parse(data['dateTime']),
+            products: (data['products'] as List<dynamic>)
+                .map((item) => CartItem(
+              id: item['id'],
+              pricePerOne: item['price'],
+              quantity: item['quantity'],
+              title: item['title'],
+              author: item['author'],
+            ),
+            ).toList()
+        ),
+        );
+      });
+    } catch(err) {
+      print('You have no book orders');
+    }
+    _orders = loadedOrders.reversed.toList();
+    notifyListeners();
   }
 
   Future<void> addOrder(List<CartItem> cartBooks, double total) async {
