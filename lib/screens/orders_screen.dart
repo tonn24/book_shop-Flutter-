@@ -16,41 +16,47 @@ class _OrdersScreenState extends State<OrdersScreen> {
   var _isLoading = false;
 
   @override
-  void initState() {
-    Future.delayed(Duration.zero).then((_) async {
-      setState(() {
-        _isLoading = true;
-      });
-      await Provider.of<Orders>(context, listen: false).fetchAndSetOrder();
-      setState(() {
-        _isLoading = false;
-      });
-    });
-    // TODO: implement initState
-    super.initState();
-  }
-
-  @override
   Widget build(BuildContext context) {
-    final orderdata = Provider.of<Orders>(context);
+    print('Building orders!');
     return Scaffold(
       appBar: AppBar(
-        title: Text('Your Orders')
+        title: Text('Your Orders'),
       ),
       drawer: AppDrawer(),
-      body: _isLoading ? Center(child: CircularProgressIndicator()) : orderdata.orders.length <= 0 ? Center(
-        child: Text(
-            'You have no books in your orders yet!',
-          style: TextStyle(
-            height: 22,
-            color: Colors.grey,
-            fontSize: 20.0,
-          ),
-        ),
-      ) : ListView.builder(
-        itemCount: orderdata.orders.length,
-          itemBuilder: (ctx, i) => ord.OrderItem(orderdata.orders[i]),
-        )
-      );
+      body: FutureBuilder(
+        future: Provider.of<Orders>(context, listen: false).fetchAndSetOrder(),
+        builder: (ctx, data) {
+          if (data.connectionState == ConnectionState.waiting) {
+            return Center(child: CircularProgressIndicator());
+          } else {
+            if(data.error != null) {
+              return Center(
+              child: Text('An error has occured!'),
+              );
+            } else {
+              if(data.data == null) {
+                return Center(
+                  child: Text(
+                    'No books in your orders yet! ',
+                    style: TextStyle(
+                    color: Colors.grey,
+                    fontSize: 20.0,
+                  ),
+                  ),
+                );
+              } else {
+                return Consumer<Orders>(
+                  builder: (ctx, orderData, child) => ListView.builder(
+                    itemCount: orderData.orders.length,
+                    itemBuilder: (ctx, i) => ord.OrderItem(orderData.orders[i]),
+                  ),
+                );
+              }
+
+            }
+          }
+        },
+      ),
+    );
   }
 }
