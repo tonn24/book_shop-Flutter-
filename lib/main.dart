@@ -1,6 +1,7 @@
 import 'package:bookshop/screens/cart_screen.dart';
 import 'package:flutter/material.dart';
 import 'constant.dart';
+import 'providers/auth.dart';
 import 'screens/product_screen.dart';
 import 'screens/book_detail_screen.dart';
 import 'providers/products.dart';
@@ -11,6 +12,7 @@ import 'providers/orders.dart';
 import './screens/orders_screen.dart';
 import './screens/user_books_screen.dart';
 import './screens/edit_book_screen.dart';
+import './screens/auth_screen.dart';
 
 
 void main() => runApp(MyApp());
@@ -20,6 +22,9 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MultiProvider(
         providers: [
+          ChangeNotifierProvider.value(
+            value: Auth(),
+          ),
           ChangeNotifierProvider(
             create: (ctx) => Products(),
           ),
@@ -37,13 +42,14 @@ class MyApp extends StatelessWidget {
           accentColor: backgroundColor,
 
         ),
-        home: ProductsScreen(),
+        home: AuthScreen(),
         routes: {
           BookDetailScreen.routeName: (ctx) => BookDetailScreen(),
           CartScreen.routeName: (ctx)  => CartScreen(),
           OrdersScreen.routeName: (ctx) => OrdersScreen(),
           UserBooksScreen.routeName: (ctx) => UserBooksScreen(),
           EditBookScreen.routeName: (ctx) => EditBookScreen(),
+
         },
       ),
     );
