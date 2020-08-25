@@ -26,6 +26,7 @@ class _OrdersScreenState extends State<OrdersScreen> {
       body: FutureBuilder(
         future: Provider.of<Orders>(context, listen: false).fetchAndSetOrder(),
         builder: (ctx, data) {
+          //This area needs fixing
           if (data.connectionState == ConnectionState.waiting) {
             return Center(child: CircularProgressIndicator());
           } else {
@@ -33,29 +34,26 @@ class _OrdersScreenState extends State<OrdersScreen> {
               return Center(
               child: Text('An error has occured!'),
               );
-            } else {
-              if(data.data == null) {
-                return Center(
-                  child: Text(
-                    'No books in your orders yet! ',
-                    style: TextStyle(
-                    color: Colors.grey,
-                    fontSize: 20.0,
-                  ),
-                  ),
-                );
-              } else {
+            } else if(data.error == null) {
                 return Consumer<Orders>(
                   builder: (ctx, orderData, child) => ListView.builder(
                     itemCount: orderData.orders.length,
                     itemBuilder: (ctx, i) => ord.OrderItem(orderData.orders[i]),
                   ),
                 );
-              }
-
+              } else {
+              return Center(
+                child: Text(
+                  'No books in your orders yet! ',
+                  style: TextStyle(
+                    color: Colors.grey,
+                    fontSize: 20.0,
+                  ),
+                ),
+              );
+            }
             }
           }
-        },
       ),
     );
   }

@@ -31,7 +31,7 @@ class Products with ChangeNotifier {
   }
 
   Future<void> fetchAndSetBooks() async {
-    const url = 'https://book-shop-d9875.firebaseio.com/products.json';
+    final url = 'https://book-shop-d9875.firebaseio.com/products.json?auth=$token';
     try {
       final response = await http.get(url);
       final data = json.decode(response.body) as Map<String, dynamic>;
@@ -53,9 +53,13 @@ class Products with ChangeNotifier {
       print(err);
     }
   }
+  final String token;
+
+
+  Products(this.token, this._items);
 
   Future<void> addProduct(Product product) async {
-    const url = 'https://book-shop-d9875.firebaseio.com/products.json';
+    final url = 'https://book-shop-d9875.firebaseio.com/products.json?auth=$token';
     try {
       final response = await http.post(
         url,
@@ -88,7 +92,7 @@ class Products with ChangeNotifier {
   Future<void> updateProduct(String id, Product newProduct) async {
     final prodIndex = _items.indexWhere((prod) => prod.id == id);
     if (prodIndex >= 0) {
-      final url = 'https://book-shop-d9875.firebaseio.com/products/$id.json';
+      final url = 'https://book-shop-d9875.firebaseio.com/products/$id.json?auth=$token';
       await http.patch(url, body: json.encode({
         'title': newProduct.title,
         'author': newProduct.author,
@@ -104,7 +108,7 @@ class Products with ChangeNotifier {
   }
 
   void deleteProduct(String id) async {
-    final url = 'https://book-shop-d9875.firebaseio.com/products/$id.json';
+    final url = 'https://book-shop-d9875.firebaseio.com/products/$id.json?auth=$token';
     final existingProductIndex = _items.indexWhere((prod) => prod.id == id);
     var existingProduct = _items[existingProductIndex];
     _items.removeAt(existingProductIndex);

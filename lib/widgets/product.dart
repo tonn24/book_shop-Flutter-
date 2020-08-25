@@ -4,6 +4,7 @@ import 'package:bookshop/screens/book_detail_screen.dart';
 import 'package:provider/provider.dart';
 import '../providers/product.dart';
 import '../providers/cart.dart';
+import '../providers/auth.dart';
 
 
 class BookItem extends StatelessWidget {
@@ -12,6 +13,7 @@ class BookItem extends StatelessWidget {
   Widget build(BuildContext context) {
     final product = Provider.of<Product>(context, listen: false);
     final cart = Provider.of<Cart>(context, listen: false);
+    final authData = Provider.of<Auth>(context, listen: false);
 
     return ClipRRect(
       borderRadius: BorderRadius.circular(10.0),
@@ -43,7 +45,7 @@ class BookItem extends StatelessWidget {
           leading: IconButton(
               icon: Icon(product.isFavorite ? Icons.favorite : Icons.favorite_border),
               onPressed: (){
-                product.toggleFavorite();
+                product.toggleFavorite(authData.token);
               },
             color: Theme.of(context).accentColor,
           ),
