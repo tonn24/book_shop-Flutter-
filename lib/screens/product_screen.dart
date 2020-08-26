@@ -29,7 +29,7 @@ class _ProductsScreenState extends State<ProductsScreen> {
 
   @override
   void initState() {
-    //Provider.of<Products>(context, listen: false).fetchAndSetBooks();
+
     super.initState();
   }
 

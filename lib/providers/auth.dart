@@ -20,6 +20,10 @@ class Auth with ChangeNotifier {
     return null;
   }
 
+  String get userId {
+    return _userId;
+  }
+
   Future <void> _authenticate(String email, String password, String urlSegment) async {
     var url =
         'https://www.googleapis.com/identitytoolkit/v3/relyingparty/$urlSegment?key=AIzaSyDIOBHGEgelYJDkVEq3C19diay3pKe2RjM';
@@ -52,7 +56,7 @@ class Auth with ChangeNotifier {
   }
 
   Future<void> signup(String email, String password) async {
-    return _authenticate(email, password, 'signUpNewUser');
+    return _authenticate(email, password, 'signupNewUser');
   }
 
   Future<void> login(String email, String password) async {
