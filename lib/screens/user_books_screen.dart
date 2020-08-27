@@ -9,7 +9,7 @@ class UserBooksScreen extends StatelessWidget {
   static const routeName = '/user-books';
 
   Future<void> _refreshBooks(BuildContext context) async {
-    Provider.of<Products>(context).fetchAndSetBooks();
+    Provider.of<Products>(context).fetchAndSetBooks(true);
   }
 
   @override
