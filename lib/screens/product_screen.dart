@@ -39,7 +39,7 @@ class _ProductsScreenState extends State<ProductsScreen> {
       setState(() {
         _isLoading = true;
       });
-      Provider.of<Products>(context).fetchAndSetBooks().then((_) {
+      Provider.of<Products>(context).fetchAndSetBooks(false).then((_) {
         setState(() {
           _isLoading = false;
         });

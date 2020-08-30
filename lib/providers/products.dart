@@ -37,10 +37,12 @@ class Products with ChangeNotifier {
   Products(this.token, this._items, this.userId);
 
   Future<void> fetchAndSetBooks([bool filterByUser = false]) async {
-    final filter = filterByUser ? 'orderBy"creatorId"&equalTo"$userId"': '';
+    final filter = filterByUser ? 'orderBy="creatorId"&equalTo="$userId"' : '';
     var url = 'https://book-shop-d9875.firebaseio.com/products.json?auth=$token&$filter';
+    //'https://flutter-update.firebaseio.com/products.json?auth=$token&$filter';
     try {
       final response = await http.get(url);
+
       final data = json.decode(response.body) as Map<String, dynamic>;
       if(data == null) {
         return;

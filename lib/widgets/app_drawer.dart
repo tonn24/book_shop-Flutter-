@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import '../screens/orders_screen.dart';
 import '../screens/user_books_screen.dart';
+import '../providers/auth.dart';
+import 'package:provider/provider.dart';
 
 
 class AppDrawer extends StatelessWidget {
@@ -35,6 +37,15 @@ class AppDrawer extends StatelessWidget {
           title: Text('Manage Books'),
           onTap: () {
             Navigator.of(context).pushReplacementNamed(UserBooksScreen.routeName);
+          },
+        ),
+        Divider(),
+        ListTile(
+          leading: Icon(Icons.exit_to_app),
+          title: Text('Log out'),
+          onTap: () {
+            Navigator.of(context).pop();
+            Provider.of<Auth>(context, listen: false).logout();
           },
         ),
       ],
