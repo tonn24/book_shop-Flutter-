@@ -1,4 +1,5 @@
 import 'package:bookshop/screens/cart_screen.dart';
+import 'package:bookshop/screens/splash_screen.dart';
 import 'package:flutter/material.dart';
 import 'constant.dart';
 import 'providers/auth.dart';
@@ -13,6 +14,7 @@ import './screens/orders_screen.dart';
 import './screens/user_books_screen.dart';
 import './screens/edit_book_screen.dart';
 import './screens/auth_screen.dart';
+import 'screens/splash_screen.dart';
 
 
 void main() => runApp(MyApp());
@@ -52,7 +54,13 @@ class MyApp extends StatelessWidget {
           accentColor: backgroundColor,
 
         ),
-        home: authData.isAuth ? ProductsScreen() : AuthScreen(),
+        home: authData.isAuth ? ProductsScreen() : FutureBuilder(
+          future: authData.autoLogin(),
+          builder: (ctx, authResultSnapshot) =>
+          authResultSnapshot.connectionState == ConnectionState.waiting ?
+          SplashScreen() :
+          AuthScreen(),
+        ),
         routes: {
           BookDetailScreen.routeName: (ctx) => BookDetailScreen(),
           CartScreen.routeName: (ctx)  => CartScreen(),
