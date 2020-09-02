@@ -116,10 +116,10 @@ class _AuthCardState extends State<AuthCard> with SingleTickerProviderStateMixin
     _heightAnimation = Tween<Size>(
         begin: Size(double.infinity, 260),
         end: Size(double.infinity, 320))
-        .animate(CurvedAnimation(parent: _controller, curve: Curves.easeIn,
+        .animate(CurvedAnimation(parent: _controller, curve: Curves.slowMiddle,
     ),
     );
-    _opacityAnimation = Tween(begin: 0.0, end: 1.0).animate(CurvedAnimation(parent: _controller, curve: Curves.easeIn),
+    _opacityAnimation = Tween(begin: 0.0, end: 1.0).animate(CurvedAnimation(parent: _controller, curve: Curves.slowMiddle),
     );
   }
 
@@ -213,7 +213,7 @@ class _AuthCardState extends State<AuthCard> with SingleTickerProviderStateMixin
       elevation: 8.0,
       child: AnimatedContainer(
         duration: Duration(milliseconds: 300),
-        curve: Curves.easeIn,
+        curve: Curves.slowMiddle,
         height: _authMode  == AuthMode.signup ? 320 : 260,
         constraints:
         BoxConstraints(minHeight: _authMode == AuthMode.signup ? 320 : 260),
@@ -252,9 +252,9 @@ class _AuthCardState extends State<AuthCard> with SingleTickerProviderStateMixin
                 AnimatedContainer(
                   constraints: BoxConstraints(
                       minHeight: _authMode == AuthMode.signup ? 60 : 0,
-                      maxHeight: _authMode == AuthMode.Login ? 120 : 0),
+                      maxHeight: _authMode == AuthMode.signup ? 120 : 0),
                   duration: Duration(milliseconds: 300),
-                  curve: Curves.easeIn,
+                  curve: Curves.slowMiddle,
                   child: FadeTransition(
                     opacity: _opacityAnimation,
                     child: TextFormField(

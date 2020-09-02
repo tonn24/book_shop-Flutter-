@@ -14,43 +14,53 @@ class BookDetailScreen extends StatelessWidget {
         listen: false,
     ).findById(productId);
     return Scaffold(
-      appBar: AppBar(
-        title: Text(loadedBook.title),
-      ),
-      body: SingleChildScrollView(
-        child: Column(
-          children: <Widget>[
-             Container(
-              height: 300.0,
-              //width: double.infinity,
-              child: Container(
-                padding: EdgeInsets.only(top: 10.0),
+      //appBar: AppBar(
+      //  title: Text(loadedBook.title),
+      //),
+      body: CustomScrollView(
+        slivers: <Widget>[
+          SliverAppBar(
+            expandedHeight: 300,
+            pinned: true,
+            flexibleSpace: FlexibleSpaceBar(
+              title: Text(loadedBook.price.toString() + '€'),
+              background: Hero(
+                tag: loadedBook.id,
                 child: Image.network(
                   loadedBook.imageUrl,
-                  fit: BoxFit.cover,
                 ),
               ),
             ),
-            SizedBox(height: 10.0,),
-            Text(
-                loadedBook.title + "\n" + loadedBook.author,
-                style: TextStyle(
+          ),
+          SliverList(
+            delegate: SliverChildListDelegate([
+              SizedBox(height: 10.0,),
+              Center(
+                child: Text(
+                  loadedBook.title + "\n" + loadedBook.author,
+                  style: TextStyle(
                     color: Colors.grey,
                     fontSize: 20.0,
+                  ),
                 ),
-            ),
-
-            SizedBox(height: 10.0),
-            Container(
-              padding: EdgeInsets.symmetric(horizontal: 10.0),
-              width: double.infinity,
-                child: Text(
-                  loadedBook.description,
-                  textAlign: TextAlign.center,
-                  softWrap: true,))
-          ],
-        ),
-      ),
+              ),
+              SizedBox(height: 10.0),
+              Container(
+                  padding: EdgeInsets.symmetric(horizontal: 10.0),
+                  width: double.infinity,
+                  child: Padding(
+                    padding: EdgeInsets.all(30),
+                    child: Text(
+                      loadedBook.description,
+                      textAlign: TextAlign.center,
+                      softWrap: true,
+                    ),
+                  )
+              )
+            ]),
+          ),
+        ],
+    )
     );
   }
 }
