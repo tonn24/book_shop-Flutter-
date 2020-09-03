@@ -15,6 +15,7 @@ import './screens/user_books_screen.dart';
 import './screens/edit_book_screen.dart';
 import './screens/auth_screen.dart';
 import 'screens/splash_screen.dart';
+import 'helpers/custom_route.dart';
 
 
 void main() => runApp(MyApp());
@@ -52,7 +53,11 @@ class MyApp extends StatelessWidget {
         theme: ThemeData(
           primaryColor: darkBackgroundColor,
           accentColor: backgroundColor,
-
+          fontFamily: 'Montserrat',
+          pageTransitionsTheme: PageTransitionsTheme(builders: {
+            TargetPlatform.android: CustomPageTransition(),
+            TargetPlatform.iOS: CustomPageTransition(),
+          })
         ),
         home: authData.isAuth ? ProductsScreen() : FutureBuilder(
           future: authData.autoLogin(),
@@ -67,7 +72,6 @@ class MyApp extends StatelessWidget {
           OrdersScreen.routeName: (ctx) => OrdersScreen(),
           UserBooksScreen.routeName: (ctx) => UserBooksScreen(),
           EditBookScreen.routeName: (ctx) => EditBookScreen(),
-
         },
       ),)
     );

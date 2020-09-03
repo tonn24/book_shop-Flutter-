@@ -182,6 +182,7 @@ class _AuthCardState extends State<AuthCard> with SingleTickerProviderStateMixin
     } catch (err) {
       var errorMessage = 'Could not authenticate';
       _showErrorDialog(errorMessage);
+      print(err);
     }
 
     setState(() {
